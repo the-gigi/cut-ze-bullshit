@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 
+
 def make_segment(input_file, start_time, duration, segment):
     """ """
     cmd = f"""docker run --rm 
@@ -12,6 +13,7 @@ def make_segment(input_file, start_time, duration, segment):
              {segment}
              """.split()
     subprocess.check_call(cmd)
+
 
 def splice_segments(segments, output_file):
     """ """
@@ -24,7 +26,6 @@ def splice_segments(segments, output_file):
              -c copy
              {output_file}""".split()
     subprocess.check_call(cmd)
-
 
 
 def read_config(config_filename):
@@ -47,6 +48,7 @@ def read_config(config_filename):
     You may comment out lines with #
 
     """
+
     def time2seconds(t):
         components = t.split(':')
         seconds = 0
@@ -80,14 +82,15 @@ def main():
     input_file = os.path.split(input_file)[-1]
     segments = []
     for i, segment_time in enumerate(segment_times):
-        print(f'Processing segment {i+1}/{len(segment_times)}...')
-        segment = f'{input_file}-{i+1}{ext}'
+        print(f'Processing segment {i + 1}/{len(segment_times)}...')
+        segment = f'{input_file}-{i + 1}{ext}'
         start_time, duration = segment_time
         make_segment(input_file, start_time, duration, segment)
         segments.append(segment)
 
     output_file = f'{input_file}.cut-ze-bullshit{ext}'
     splice_segments(segments, output_file)
+
 
 if __name__ == '__main__':
     main()
