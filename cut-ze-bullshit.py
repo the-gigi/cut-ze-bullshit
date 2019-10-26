@@ -63,7 +63,10 @@ def read_config(config_filename):
         if line.startswith('#') or line == '':
             continue
         times = [time2seconds(x) for x in line.split(',')]
-        segment_times.append((times[0], times[1] - times[0]))
+        duration = times[1] - times[0]
+        if duration <= 0:
+            raise RuntimeError('Start time > end time: ', line)
+        segment_times.append((times[0], duration))
 
     return input_file, segment_times
 
@@ -78,17 +81,20 @@ def main():
     basedir = os.path.dirname(input_file)
     os.chdir(basedir)
     basename, ext = os.path.splitext(input_file)
-    # Now use loca filename
+    base = basename.split('/')[-1]
+    # Now use local filename
     input_file = os.path.split(input_file)[-1]
     segments = []
     for i, segment_time in enumerate(segment_times):
-        print(f'Processing segment {i + 1}/{len(segment_times)}...')
-        segment = f'{input_file}-{i + 1}{ext}'
         start_time, duration = segment_time
-        make_segment(input_file, start_time, duration, segment)
+        print(f'Processing segment {i + 1}/{len(segment_times)}, duration: {duration} seconds...')
+        segment = f'{base}-{i + 1}{ext}'
         segments.append(segment)
+        if os.path.isfile(segment):
+            continue
+        make_segment(input_file, start_time, duration, segment)
 
-    output_file = f'{input_file}.cut-ze-bullshit{ext}'
+    output_file = f'{base}.cut-ze-bullshit{ext}'
     splice_segments(segments, output_file)
 
 
