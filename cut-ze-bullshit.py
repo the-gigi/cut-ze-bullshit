@@ -12,7 +12,7 @@ def make_segment(input_file, start_time, duration, segment):
              -t  {duration}
              {segment}
              """.split()
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def splice_segments(segments, output_file):
