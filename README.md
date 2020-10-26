@@ -14,7 +14,7 @@ as the input file.
 ## Requirements
 
 cut-ze-bullshit depends on [ffmpeg](https://ffmpeg.org) for all the heavy lifting. 
-It uses a Docker image of ffmpeg, so there ino need to install ffmpeg. But, it
+It uses a Docker image of ffmpeg, so there is no need to install ffmpeg. But, it
 requires [Docker](https://www.docker.com)
 
 
